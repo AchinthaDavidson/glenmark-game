@@ -86,6 +86,30 @@ def get_all_doctors():
         "doctors": doctors
     })
 
+@app.route("/leaderboard", methods=["GET"])
+def get_leaderboard():
+    try:
+        # Reference to the Doctors collection
+        doctors_ref = db.collection("Doctors")
+
+        # Query top 10 doctors sorted by Score descending
+        top_doctors = doctors_ref.order_by("Score", direction=firestore.Query.DESCENDING).limit(10).stream()
+
+        leaderboard = []
+        for doc in top_doctors:
+            data = doc.to_dict()
+            leaderboard.append({
+                "DoctorName": data.get("DoctorName"),
+                "SLMC_ID": data.get("SLMC_ID"),
+                "Score": data.get("Score"),
+                "Completed": data.get("Completed")
+            })
+
+        return jsonify({"leaderboard": leaderboard}), 200
+
+    except Exception as e:
+        return jsonify({"message": "Error fetching leaderboard", "error": str(e)}), 500
+
 @app.route("/")
 def home():
     return "Doctor Game API Running"
