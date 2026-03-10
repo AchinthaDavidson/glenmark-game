@@ -69,7 +69,22 @@ def update_score():
     doc_ref.update(update_data)
 
     return jsonify({"message": "Score updated successfully"})
+    
+@app.route("/doctors", methods=["GET"])
+def get_all_doctors():
 
+    doctors_ref = db.collection("Doctors").stream()
+
+    doctors = []
+
+    for doc in doctors_ref:
+        doctor_data = doc.to_dict()
+        doctors.append(doctor_data)
+
+    return jsonify({
+        "count": len(doctors),
+        "doctors": doctors
+    })
 
 @app.route("/")
 def home():
