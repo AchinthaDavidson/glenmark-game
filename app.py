@@ -8,7 +8,7 @@ app = Flask(__name__)
 
 # Initialize Firebase safely
 if not firebase_admin._apps:
-    cred = credentials.Certificate("firebase-key.json")
+    cred = credentials.Certificate("/secrets/firebase-key")
     firebase_admin.initialize_app(cred)
 
 db = firestore.client()
