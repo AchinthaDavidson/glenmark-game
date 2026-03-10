@@ -8,11 +8,9 @@ app = Flask(__name__)
 
 # Initialize Firebase safely
 if not firebase_admin._apps:
-    cred = credentials.Certificate("/secrets/firebase-key")
-    firebase_admin.initialize_app(cred)
+    firebase_admin.initialize_app()
 
 db = firestore.client()
-
 
 @app.route("/register", methods=["POST"])
 def register_doctor():
